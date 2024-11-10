@@ -1,12 +1,12 @@
-﻿using olx_assistant_domain.Common;
+﻿using olx_assistant_domain.Entities.Common;
 
-namespace olx_assistant_domain;
+namespace olx_assistant_domain.Entities;
 public class Product : BaseEntity
 {
-    public int ProductId {  get; set; }
+    public int ProductId { get; set; }
     public string? Title { get; set; }
-    public string? Description { get; set;}
-    public string? Place { get; set;}
+    public string? Description { get; set; }
+    public string? Place { get; set; }
     public decimal Price { get; set; }
     public int Rating { get; set; }
     public required Target SearchTarget { get; set; }

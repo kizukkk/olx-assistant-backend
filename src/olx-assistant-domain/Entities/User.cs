@@ -1,6 +1,6 @@
-﻿using olx_assistant_domain.Common;
+﻿using olx_assistant_domain.Entities.Common;
 
-namespace olx_assistant_domain;
+namespace olx_assistant_domain.Entities;
 public class User : BaseEntity
 {
     public required string Login { get; set; }

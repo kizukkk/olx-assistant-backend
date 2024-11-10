@@ -1,4 +1,4 @@
-﻿namespace olx_assistant_domain.Common;
+﻿namespace olx_assistant_domain.Entities.Common;
 public abstract class BaseEntity
 {
     public int Id { get; set; }
