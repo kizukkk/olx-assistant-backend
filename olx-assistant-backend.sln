@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2E6DA264-561E-4B6F-BEE6-A6631316720F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-api", "src\olx-assistant-api\olx-assistant-api.csproj", "{27130BFF-6ABE-45AB-9EF3-68D19BB3517D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-scraping", "src\olx-assistant-scraping\olx-assistant-scraping.csproj", "{7EC48873-24E1-4F1C-A95C-9FECA9AD45D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-test", "src\olx-assistant-test\olx-assistant-test.csproj", "{EB8EBB7B-DDDA-4931-B39E-FF71379A5C07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27130BFF-6ABE-45AB-9EF3-68D19BB3517D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27130BFF-6ABE-45AB-9EF3-68D19BB3517D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27130BFF-6ABE-45AB-9EF3-68D19BB3517D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27130BFF-6ABE-45AB-9EF3-68D19BB3517D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC48873-24E1-4F1C-A95C-9FECA9AD45D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC48873-24E1-4F1C-A95C-9FECA9AD45D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC48873-24E1-4F1C-A95C-9FECA9AD45D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC48873-24E1-4F1C-A95C-9FECA9AD45D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB8EBB7B-DDDA-4931-B39E-FF71379A5C07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB8EBB7B-DDDA-4931-B39E-FF71379A5C07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB8EBB7B-DDDA-4931-B39E-FF71379A5C07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB8EBB7B-DDDA-4931-B39E-FF71379A5C07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27130BFF-6ABE-45AB-9EF3-68D19BB3517D} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
+		{7EC48873-24E1-4F1C-A95C-9FECA9AD45D3} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
+		{EB8EBB7B-DDDA-4931-B39E-FF71379A5C07} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
+	EndGlobalSection
+EndGlobal
