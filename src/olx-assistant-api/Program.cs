@@ -1,8 +1,10 @@
 #region Application Builder
 
+using FastEndpoints;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddFastEndpoints();
 
 #endregion
 
@@ -11,7 +13,7 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.MapControllers();
+app.UseFastEndpoints();
 
 app.Run();
 
