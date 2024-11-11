@@ -13,4 +13,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Endpoints\Keyword\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\olx-assistant-application\olx-assistant-application.csproj" />
+  </ItemGroup>
+
 </Project>
