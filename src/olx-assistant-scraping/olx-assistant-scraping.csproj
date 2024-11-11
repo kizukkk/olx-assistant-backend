@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
+  </ItemGroup>
+
 </Project>
