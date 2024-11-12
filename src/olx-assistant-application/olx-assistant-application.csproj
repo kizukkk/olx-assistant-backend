@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\Shared\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
+    <ProjectReference Include="..\olx-assistant-scraping\olx-assistant-scraping.csproj" />
   </ItemGroup>
 
 </Project>
