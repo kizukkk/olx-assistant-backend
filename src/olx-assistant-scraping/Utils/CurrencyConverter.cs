@@ -7,13 +7,19 @@ public static class CurrencyConverter
     private static DateTime _lastFetched;
     private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
 
-    public static async Task<decimal> ConvertUahToUsd(decimal uahAmount)
+    public static async Task<decimal> ConvertUAHToUSD(decimal uah)
     {
-        decimal rate = await GetUahToUsdRateAsync();
-        return uahAmount * rate;
+        decimal rate = await GetUAHToUSDRateAsync();
+        return uah / rate;
     }
 
-    private static async Task<decimal> GetUahToUsdRateAsync()
+    public static async Task<decimal> ConvertUSDToUAH(decimal usd)
+    {
+        decimal rate = await GetUAHToUSDRateAsync();
+        return usd * rate;
+    }
+
+    private static async Task<decimal> GetUAHToUSDRateAsync()
     {
         if (_usdToUahRate != 0 && (DateTime.Now - _lastFetched) < CacheDuration)
         {
