@@ -63,7 +63,7 @@ public static class ProductScraping
 
         var stringProductPrice = html.DocumentNode.SelectSingleNode("//*[@class=\"css-90xrc0\"]").InnerText;
         var price = decimal.Parse(Regex.Match(stringProductPrice, @"\d+").Value, CultureInfo.InvariantCulture);
-        var priceUSD = await CurrencyConverter.ConvertUAHToUSD(price);
+        var priceUSD = await CurrencyConverter.ConvertUAH2USD(price);
 
         var stringProductId = html.DocumentNode.SelectSingleNode("//*[@data-cy=\"ad-footer-bar-section\"]/span").InnerText;
         var productId = int.Parse(Regex.Match(stringProductId, @"\d+").Value, CultureInfo.InvariantCulture);

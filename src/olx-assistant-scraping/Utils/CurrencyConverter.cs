@@ -7,32 +7,32 @@ public static class CurrencyConverter
     private static DateTime _lastFetched;
     private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(1);
 
-    public static async Task<decimal> ConvertUAHToUSD(decimal uah)
+    public static async Task<decimal> ConvertUAH2USD(decimal uah)
     {
-        decimal rate = await GetUAHToUSDRateAsync();
+        decimal rate = await GetUAH2USDRateAsync();
         return uah / rate;
     }
 
-    public static async Task<decimal> ConvertUSDToUAH(decimal usd)
+    public static async Task<decimal> ConvertUSD2UAH(decimal usd)
     {
-        decimal rate = await GetUAHToUSDRateAsync();
+        decimal rate = await GetUAH2USDRateAsync();
         return usd * rate;
     }
 
-    private static async Task<decimal> GetUAHToUSDRateAsync()
+    private static async Task<decimal> GetUAH2USDRateAsync()
     {
         if (_usdToUahRate != 0 && (DateTime.Now - _lastFetched) < CacheDuration)
         {
             return _usdToUahRate;
         }
 
-        _usdToUahRate = await FetchUsdToUahRateFromApi();
+        _usdToUahRate = await FetchUSD2UAHRateFromApi();
         _lastFetched = DateTime.Now;
 
         return _usdToUahRate;
     }
 
-    private static async Task<decimal> FetchUsdToUahRateFromApi()
+    private static async Task<decimal> FetchUSD2UAHRateFromApi()
     {
         using (var client = new HttpClient())
         {
