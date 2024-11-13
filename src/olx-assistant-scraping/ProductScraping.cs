@@ -9,12 +9,10 @@ namespace olx_assistant_scraping;
 public static class ProductScraping
 {
     private static readonly HtmlWeb _web = new ();
-    private static string _domain;
+    private static string _domain = String.Empty;
 
     public static async Task<List<Product>> GetProductListAsync(Uri uri)
     {
-        //var watchList = System.Diagnostics.Stopwatch.StartNew();
-
         _domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
 
         var htmlDoc = _web.Load(uri);
@@ -22,12 +20,36 @@ public static class ProductScraping
         var htmlProductContainer = htmlDoc.DocumentNode.SelectSingleNode("//*[@data-testid=\"listing-grid\"]");
         var htmlProductList = htmlProductContainer.SelectNodes("//*[@data-cy=\"l-card\"]");
 
-        var productList = await GetProductListAsync(htmlProductList);
+        return GetProductListParallel(htmlProductList);
+    }
 
-        //watchList.Stop();
-        //var elapsedMs2 = watchList.ElapsedMilliseconds;
-        //Console.WriteLine($"Total time to processed Collection of {productList.Count()+1} Products is {elapsedMs2}ms");
+    private static async Task<List<Product>> GetProductListAsync(HtmlNodeCollection htmlList)
+    {
+        var productList = new List<Product>();
 
+        foreach (var item in htmlList)
+        {
+            var productUrl = item.SelectSingleNode("//*[@class=\"css-z3gu2d\"]").Attributes["href"].Value;
+            var htmlProduct = _web.Load(_domain + productUrl);
+
+            var product = await ScrapProductFromHtmlAsync(htmlProduct);
+            productList.Add(product);
+        }
+        return productList;
+    }
+
+    private static List<Product> GetProductListParallel(HtmlNodeCollection htmlList)
+    {
+        var productList = new List<Product>();
+
+        Parallel.ForEach(htmlList, item =>
+        {
+            var productUrl = item.SelectSingleNode("//*[@class=\"css-z3gu2d\"]").Attributes["href"].Value;
+            var htmlProduct = _web.Load(_domain + productUrl);
+
+            var product = ScrapProductFromHtmlAsync(htmlProduct);
+            productList.Add(product.GetAwaiter().GetResult());
+        });
         return productList;
     }
 
@@ -64,53 +86,5 @@ public static class ProductScraping
             Price = priceUSD,
             Tags = productTags
         };
-    }
-
-    private static async Task<List<Product>> GetProductListAsync(HtmlNodeCollection htmlList)
-    {
-        var productList = new List<Product>();
-
-        int i = 1;
-        foreach (var item in htmlList)
-        {
-            var watchItem = System.Diagnostics.Stopwatch.StartNew();
-            // the code that you want to measure comes here
-
-            var productUrl = item.SelectSingleNode("//*[@class=\"css-z3gu2d\"]").Attributes["href"].Value;
-            var htmlProduct = _web.Load(_domain + productUrl);
-
-
-            var product = await ScrapProductFromHtmlAsync(htmlProduct);
-            productList.Add(product);
-
-            watchItem.Stop();
-            var elapsedMs = watchItem.ElapsedMilliseconds;
-            Console.WriteLine($"Processed {i} out of {htmlList.Count() + 1} - {elapsedMs}ms");
-            i++;
-        }
-        return productList;
-    }
-
-    private static List<Product> GetProductListParallel(HtmlNodeCollection htmlList)
-    {
-        var productList = new List<Product>();
-
-        int i = 1;
-        Parallel.ForEach(htmlList, item =>
-        {
-            var watchItem = System.Diagnostics.Stopwatch.StartNew();
-
-            var productUrl = item.SelectSingleNode("//*[@class=\"css-z3gu2d\"]").Attributes["href"].Value;
-            var htmlProduct = _web.Load(_domain + productUrl);
-
-            var product = ScrapProductFromHtmlAsync(htmlProduct);
-            productList.Add(product.Result);
-
-            watchItem.Stop();
-            var elapsedMs = watchItem.ElapsedMilliseconds;
-            Console.WriteLine($"Processed {i} out of {htmlList.Count() + 1} - {elapsedMs}ms");
-            i++;
-        });
-        return productList;
     }
 }
