@@ -11,7 +11,8 @@ public static class ProductMatchingService
         Uri paginatedUrl = new Uri($"{target.TargetUri}/?page={1}");
 
         //TODO: save product list and map to ProductResponse using Mapper
-        await ProductScraping.GetProductListAsync(paginatedUrl);
+        var scraper = new ProductsScraping(paginatedUrl);
+        var products = await scraper.GetProductList();
 
         return new List<ProductResponse>();
     }
