@@ -6,54 +6,45 @@ using HtmlAgilityPack;
 
 
 namespace olx_assistant_scraping;
-public static class ProductScraping
+public class ProductsScraping
 {
-    private static readonly HtmlWeb _web = new ();
-    private static string _domain = String.Empty;
-
-    public static async Task<List<Product>> GetProductListAsync(Uri uri)
+    private readonly HtmlWeb _web = new ();
+    private readonly string _domain;
+    private readonly Uri _uri;
+    public ProductsScraping(Uri uri)
     {
-        _domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
+        this._uri = uri;
+        this._domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
+    }
 
-        var htmlDoc = _web.Load(uri);
+    public async Task<List<Product>> GetProductList()
+    {
+        var htmlDoc = _web.Load(_uri);
 
         var htmlProductContainer = htmlDoc.DocumentNode.SelectSingleNode("//*[@data-testid=\"listing-grid\"]");
         var htmlProductList = htmlProductContainer.SelectNodes("//*[@data-cy=\"l-card\"]");
 
-        return GetProductListParallel(htmlProductList);
+        return await GetProductListParallel(htmlProductList);
     }
 
-    private static async Task<List<Product>> GetProductListAsync(HtmlNodeCollection htmlList)
+    private async Task<List<Product>> GetProductListParallel(HtmlNodeCollection htmlList)
     {
-        var productList = new List<Product>();
-
-        foreach (var item in htmlList)
-        {
-            var productUrl = item.SelectSingleNode("//*[@class=\"css-z3gu2d\"]").Attributes["href"].Value;
-            var htmlProduct = _web.Load(_domain + productUrl);
-
-            var product = await ScrapProductFromHtmlAsync(htmlProduct);
-            productList.Add(product);
-        }
-        return productList;
-    }
-
-    private static List<Product> GetProductListParallel(HtmlNodeCollection htmlList)
-    {
-        var productList = new List<Product>();
+        var productTasks = new List<Task<Product>>();
 
         Parallel.ForEach(htmlList, item =>
         {
-            var productUrl = item.SelectSingleNode("//*[@class=\"css-z3gu2d\"]").Attributes["href"].Value;
+            var productUrl = item.SelectSingleNode("//*[@data-cy=\"ad-card-title\"]/a").Attributes["href"].Value;
             var htmlProduct = _web.Load(_domain + productUrl);
 
-            var product = ScrapProductFromHtmlAsync(htmlProduct);
-            productList.Add(product.GetAwaiter().GetResult());
+            var product = ScrapProductFromHtml(htmlProduct);
+            productTasks.Add(product);
         });
-        return productList;
+
+        var products = await Task.WhenAll(productTasks);
+        return products.ToList();
     }
 
-    private static async Task<Product> ScrapProductFromHtmlAsync(HtmlDocument html)
+    private async Task<Product> ScrapProductFromHtml(HtmlDocument html)
     {
         List<Tag> productTags = new List<Tag>();
 
