@@ -5,7 +5,7 @@ public static class DataFromString
 {
     public static DateTime GetDateFromStr(string str)
     {
-        // TODO : Process the date case "Сьогодні" (today) 
+        // TODO: Process the date case "Сьогодні" (today) 
         // Потрібно опрацювати подію коли Date вказана Сьогодні
         // Наприклад використати Date.Now() або Date.UtcNow()
         str = str.Replace("р.", String.Empty).TrimEnd();
