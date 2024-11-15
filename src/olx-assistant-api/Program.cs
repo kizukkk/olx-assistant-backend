@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFastEndpoints();
 
+builder.Services.AddScoped<IProductMatchingService, ProductMatchingService>();
+
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
 #endregion
 
 
