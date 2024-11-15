@@ -4,7 +4,7 @@ using FastEndpoints;
 
 namespace olx_assistant_api.Endpoints.Product;
 
-public class ProductMatching : EndpointWithoutRequest
+public class ProductMatching : EndpointWithoutRequest<List<ProductResponse>>
 {
     public override void Configure()
     {
