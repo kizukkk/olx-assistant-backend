@@ -33,7 +33,7 @@ public class ProductsScraping
 
         Parallel.ForEach(htmlList, item =>
         {
-            var productUrl = item.SelectSingleNode("//*[@data-cy=\"ad-card-title\"]/a").Attributes["href"].Value;
+            var productUrl = item.SelectSingleNode(".//*[@data-cy=\"ad-card-title\"]/a").Attributes["href"].Value;
             var htmlProduct = _web.Load(_domain + productUrl);
 
             var product = ScrapProductFromHtml(htmlProduct);
@@ -64,7 +64,7 @@ public class ProductsScraping
         {
             var tag = new Tag()
             {
-                Name = item.SelectSingleNode("//p/span").InnerHtml,
+                Name = item.SelectSingleNode("./p").InnerText,
             };
             productTags.Add(tag);
         }
