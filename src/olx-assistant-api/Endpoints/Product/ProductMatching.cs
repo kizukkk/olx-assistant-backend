@@ -25,12 +25,8 @@ public class ProductMatching : EndpointWithoutRequest<List<ProductResponse>>
             TargetUri = new Uri("https://www.olx.ua/uk/transport/selhoztehnika"),
         };
 
-        await ProductMatchingService.StartMatchingByTarget(target);
 
-        await SendAsync( new
-        {
-
-        });
+       await SendAsync(await _matchingService.StartMatchingByTargetAsync(target));
     }
 
 }
