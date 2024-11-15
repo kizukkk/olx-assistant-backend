@@ -12,4 +12,9 @@
     <ProjectReference Include="..\olx-assistant-scraping\olx-assistant-scraping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
 </Project>
