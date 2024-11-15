@@ -6,6 +6,12 @@ namespace olx_assistant_api.Endpoints.Product;
 
 public class ProductMatching : EndpointWithoutRequest<List<ProductResponse>>
 {
+
+    private readonly IProductMatchingService _matchingService;
+
+    public ProductMatching(IProductMatchingService matchingService) => 
+        _matchingService = matchingService;
+
     public override void Configure()
     {
         Get("/product/matching");
