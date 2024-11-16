@@ -1,5 +1,5 @@
-﻿using olx_assistant_application.DTOs.Shared;
-using olx_assistant_application.Interfaces;
+﻿using olx_assistant_application.Interfaces.IServices;
+using olx_assistant_application.DTOs.Shared;
 using FastEndpoints;
 
 namespace olx_assistant_api.Endpoints.Product;
