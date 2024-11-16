@@ -1,7 +1,8 @@
-using FastEndpoints;
-using olx_assistant_application.Interfaces;
-using olx_assistant_application.Mapper;
+using olx_assistant_application.Interfaces.IServices;
 using olx_assistant_application.Services;
+using olx_assistant_application.Mapper;
+using FastEndpoints;
+
 
 
 #region Application Builder
