@@ -17,6 +17,9 @@ public class MsSqlDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder model)
     {
+        model.Entity<Product>()
+            .Property(p => p.Price)
+            .HasColumnType("smallmoney");
         base.OnModelCreating(model);
     }
 }
