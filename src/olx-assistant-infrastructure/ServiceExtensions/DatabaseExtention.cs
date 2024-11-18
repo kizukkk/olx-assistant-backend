@@ -20,4 +20,11 @@ public static class DatabaseExtension
         });
     }
 
+    public static void DatabaseMigrate(
+    this IServiceScope serviceScope
+    )
+    {
+        var dataContext = serviceScope.ServiceProvider.GetService<MsSqlDbContext>();
+        dataContext?.Database.Migrate();
+    }
 }
