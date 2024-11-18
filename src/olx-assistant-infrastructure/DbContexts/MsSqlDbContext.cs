@@ -8,6 +8,7 @@ public class MsSqlDbContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Target> Targets { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<Keyword> Keywords { get; set; }
 
 
     public MsSqlDbContext(DbContextOptions<MsSqlDbContext> options) 
