@@ -26,6 +26,8 @@ var app = builder.Build();
 
 app.UseFastEndpoints();
 
+DatabaseExtension.DatabaseMigrate(app.Services.CreateScope());
+
 app.Run();
 
 #endregion
