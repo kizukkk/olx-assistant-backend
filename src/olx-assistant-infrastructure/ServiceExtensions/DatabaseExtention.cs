@@ -13,6 +13,11 @@ public static class DatabaseExtension
     {
         var connectionString = configuration.GetConnectionString("MsSql");
 
+        //TODO : Implement Retry and Log logics   
+        services.AddDbContext<MsSqlDbContext>(opt =>
+        {
+            opt.UseSqlServer(connectionString);
+        });
     }
 
 }
