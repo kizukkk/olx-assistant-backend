@@ -1,9 +1,9 @@
 ﻿using olx_assistant_application.Interfaces.IRepositories;
 using olx_assistant_application.Interfaces.IServices;
-using olx_assistant_application.DTOs.Shared;
 using olx_assistant_domain.Entities;
 using olx_assistant_scraping;
 using AutoMapper;
+using Hangfire;
 
 namespace olx_assistant_application.Services;
 public class ProductMatchingService : IProductMatchingService
@@ -20,17 +20,30 @@ public class ProductMatchingService : IProductMatchingService
         _repo = repository;
     }
 
-    public async Task<List<ProductResponse>> StartMatchingByTargetAsync(Target target)
+    public void StartMatchingByTarget(Target target)
     {
         Uri paginatedUrl = new Uri($"{target.TargetUri}/?page={1}");
 
-        var scraper = new ProductsScraping(paginatedUrl);
+        var scapingJob = 
+        BackgroundJob.Enqueue(() => ProcessMatchingJob(paginatedUrl));
+
+        Console.WriteLine($"Started Job with {scapingJob} id");
+    }
+
+    public async Task ProcessMatchingJob(Uri url)
+    {
+        var scraper = new ProductsScraping(url);
         var products = await scraper.GetProductList();
-        var mappedProducts = _mapper.Map<List<Product>, List<ProductResponse>>(products);
 
-        products.ForEach(item => _repo.Create(item));
-        _repo.SaveChanges();
+        try
+        {
+            products.ForEach(item => _repo.Create(item));
+            _repo.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
 
-        return mappedProducts;
     }
 }
