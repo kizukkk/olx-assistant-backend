@@ -6,12 +6,12 @@ using HtmlAgilityPack;
 
 
 namespace olx_assistant_scraping;
-public class ProductsScraping
+public class ProductsScraper
 {
     private readonly HtmlWeb _web = new ();
     private readonly string _domain;
     private readonly Uri _uri;
-    public ProductsScraping(Uri uri)
+    public ProductsScraper(Uri uri)
     {
         this._uri = uri;
         this._domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);

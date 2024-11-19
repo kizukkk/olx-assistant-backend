@@ -32,7 +32,7 @@ public class ProductMatchingService : IProductMatchingService
 
     public async Task ProcessMatchingJob(Uri url)
     {
-        var scraper = new ProductsScraping(url);
+        var scraper = new ProductsScraper(url);
         var products = await scraper.GetProductList();
 
         try
