@@ -4,7 +4,7 @@ using FastEndpoints;
 
 namespace olx_assistant_api.Endpoints.Product;
 
-public class ProductMatching : EndpointWithoutRequest<List<ProductResponse>>
+public class ProductMatching : EndpointWithoutRequest
 {
 
     private readonly IProductMatchingService _matchingService;
@@ -25,8 +25,9 @@ public class ProductMatching : EndpointWithoutRequest<List<ProductResponse>>
             TargetUri = new Uri("https://www.olx.ua/uk/transport/selhoztehnika"),
         };
 
+        await _matchingService.StartMatchingByTargetAsync(target);
 
-       await SendAsync(await _matchingService.StartMatchingByTargetAsync(target));
+       await SendOkAsync();
     }
 
 }
