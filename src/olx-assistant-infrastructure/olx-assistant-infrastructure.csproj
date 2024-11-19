@@ -8,14 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\olx-assistant-application\olx-assistant-application.csproj" />
     <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
   </ItemGroup>
 
