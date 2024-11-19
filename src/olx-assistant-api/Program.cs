@@ -33,6 +33,23 @@ app.UseFastEndpoints();
 
 DatabaseExtension.DatabaseMigrate(app.Services.CreateScope());
 
+app.Lifetime.ApplicationStopped.Register(() =>
+{
+    Console.WriteLine("Server shutdown...");
+    var context = app.Services.CreateScope().ServiceProvider.GetService<MsSqlDbContext>();
+    var tableNames = context!.Model.GetEntityTypes()
+    .Select(t => t.GetTableName())
+    .Distinct()
+    .ToList();
+
+    foreach (var tableName in tableNames)
+    {
+        context.Database.ExecuteSqlRaw($"DELETE FROM {tableName};");
+        context.SaveChanges();
+    }
+    Console.WriteLine("Database is cleaned!");
+});
+
 app.Run();
 
 #endregion
