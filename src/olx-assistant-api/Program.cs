@@ -7,6 +7,7 @@ using olx_assistant_application.Services;
 using olx_assistant_application.Mapper;
 using Microsoft.EntityFrameworkCore;
 using FastEndpoints;
+using Hangfire;
 
 
 #region Application Builder
@@ -16,6 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFastEndpoints();
 
 builder.Services.MsSqlDatabaseConfigure(builder.Configuration);
+
+builder.Services.AddHangfire(opt => opt.UseSqlServerStorage(builder.Configuration.GetConnectionString("Hangfire")));
+builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IProductMatchingService, ProductMatchingService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -30,6 +34,8 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 var app = builder.Build();
 
 app.UseFastEndpoints();
+
+app.UseHangfireDashboard();
 
 DatabaseExtension.DatabaseMigrate(app.Services.CreateScope());
 
