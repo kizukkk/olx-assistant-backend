@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-infrastructure", "src\olx-assistant-infrastructure\olx-assistant-infrastructure.csproj", "{AD4501A0-6893-429E-85C4-FD58963AC1FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-database-listener", "src\olx-assistant-database-listener\olx-assistant-database-listener.csproj", "{8451C53A-1B93-421D-A8AE-CBF6464BD360}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{AD4501A0-6893-429E-85C4-FD58963AC1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD4501A0-6893-429E-85C4-FD58963AC1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD4501A0-6893-429E-85C4-FD58963AC1FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8451C53A-1B93-421D-A8AE-CBF6464BD360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8451C53A-1B93-421D-A8AE-CBF6464BD360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8451C53A-1B93-421D-A8AE-CBF6464BD360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8451C53A-1B93-421D-A8AE-CBF6464BD360}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{27130BFF-6ABE-45AB-9EF3-68D19BB3517D} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
@@ -58,5 +64,6 @@ Global
 		{1045DCA2-6498-4281-BC03-FE928E8184C7} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
 		{F525CB99-A2FC-4B8F-954E-FFF96B6FFBBA} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
 		{AD4501A0-6893-429E-85C4-FD58963AC1FB} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
+		{8451C53A-1B93-421D-A8AE-CBF6464BD360} = {2E6DA264-561E-4B6F-BEE6-A6631316720F}
 	EndGlobalSection
 EndGlobal
