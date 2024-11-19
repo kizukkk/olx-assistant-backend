@@ -5,4 +5,5 @@ public interface IBaseRepository<T>
     public void Update(T obj);
     public void Delete(int id);
     public Task<T> GetById(int id);
+    public void SaveChanges();
 }
