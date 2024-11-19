@@ -1,8 +1,12 @@
+using olx_assistant_application.Interfaces.IRepositories;
+using olx_assistant_infrastructure.ServiceExtensions;
 using olx_assistant_application.Interfaces.IServices;
+using olx_assistant_infrastructure.Repositories;
+using olx_assistant_infrastructure.DbContexts;
 using olx_assistant_application.Services;
 using olx_assistant_application.Mapper;
+using Microsoft.EntityFrameworkCore;
 using FastEndpoints;
-using olx_assistant_infrastructure.ServiceExtensions;
 
 
 #region Application Builder
@@ -14,6 +18,7 @@ builder.Services.AddFastEndpoints();
 builder.Services.MsSqlDatabaseConfigure(builder.Configuration);
 
 builder.Services.AddScoped<IProductMatchingService, ProductMatchingService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
