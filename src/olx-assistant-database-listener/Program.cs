@@ -1,13 +1,24 @@
 ﻿using Microsoft.Data.SqlClient;
 using StackExchange.Redis;
+using TableDependency.SqlClient;
+using olx_assistant_domain.Entities;
+using TableDependency.SqlClient.Base.EventArgs;
 
 
 ListeningServices.RedisInit();
-ListeningServices.StartListening();
 
+var messageRepository = new ListeningServices();
+Task task = Task.Run(() => messageRepository.StartListening());
 
-static class ListeningServices
+// Заблокуйте головний потік до закриття програми
+Console.WriteLine("Listening for changes. Press Enter to stop.");
+Console.ReadLine();
+
+messageRepository.Dispose();
+
+public class ListeningServices : IDisposable
 {
+    private SqlTableDependency<Product> sqlTableDependency;
     static readonly string SqlConnectionString = "Server=AFRODITA\\LOCALSQLSERVER;Database=olx_assistance_db;Trusted_Connection=True;User Id=app_server;Password=202124; TrustServerCertificate=True";
     static readonly ConnectionMultiplexer _redis = ConnectionMultiplexer.Connect($"localhost:6379");
     static readonly IDatabase db = _redis.GetDatabase();
@@ -34,45 +45,54 @@ static class ListeningServices
             connection.Close();
         }
     }
-
-    public static void StartListening()
+    public void StartListening()
     {
-        SqlDependency.Start(SqlConnectionString);
+        sqlTableDependency = 
+            new (SqlConnectionString, "Products");
 
-        using (SqlConnection connection = new SqlConnection(SqlConnectionString))
+        sqlTableDependency.OnStatusChanged += (sender, e) =>
         {
-            connection.Open();
+            Console.WriteLine($"Status changed: {e.Status}");
+        };
 
-            Console.WriteLine("Notification Waiting...");
-            while (true)
-            {
-                using (SqlCommand command = new SqlCommand(@"
-            WAITFOR (
-                RECEIVE TOP(1)
-                    CONVERT(NVARCHAR(MAX), message_body) AS MessageBody
-                FROM TargetQueue
-            ), TIMEOUT 5000;", connection))
-                {
-                    var result = command.ExecuteScalar();
-                    if (result != null && !string.IsNullOrEmpty(result.ToString()))
-                    {
-                        int data = 0;
+        sqlTableDependency.OnError += (sender, e) =>
+        {
+            Console.WriteLine($"Error: {e.Message}");
+        };
+        sqlTableDependency.OnChanged += HandleOnChanged;
 
-                        try
-                        {
-                            data = int.Parse((string)result);
-                        }catch (Exception ex)
-                        {
-                            Console.WriteLine($"Failed Parse data from result - {result}");
-                            Console.WriteLine(ex);
-                        }
-
-                        db.SetAdd("product_id", data);
-                        Console.WriteLine($"Received a new record: {result}");
-                    }
-                }
-            }
+        sqlTableDependency.Start();
+    }
+    private void HandleOnChanged(object sender, RecordChangedEventArgs<Product> e)
+    {
+        if (e.ChangeType == TableDependency.SqlClient.Base.Enums.ChangeType.Insert)
+        {
+            db.SetAdd("product_id", e.Entity.ProductId);
+            Console.WriteLine($"Received a new record: {e.Entity.ProductId}");
         }
     }
+
+    #region IDisposable
+
+    private bool disposedValue = false;
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing && sqlTableDependency != null)
+            {
+                sqlTableDependency.Stop();
+                sqlTableDependency.Dispose();
+            }
+
+            disposedValue = true;
+        }
+    }
+    public void Dispose()
+    {
+        Dispose(true);
+    }
+    #endregion
 }
 
