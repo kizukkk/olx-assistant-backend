@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\olx-assistant-contracts\olx-assistant-contracts.csproj" />
     <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
     <ProjectReference Include="..\olx-assistant-scraping\olx-assistant-scraping.csproj" />
   </ItemGroup>

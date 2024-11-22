@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-database-listener", "src\olx-assistant-database-listener\olx-assistant-database-listener.csproj", "{8451C53A-1B93-421D-A8AE-CBF6464BD360}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "olx-assistant-cache-service", "src\olx-assistant-cache-service\olx-assistant-cache-service.csproj", "{97A5784A-D8EC-4731-B3C4-E3A9AF6F5067}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

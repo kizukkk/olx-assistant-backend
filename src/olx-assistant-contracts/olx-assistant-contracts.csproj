@@ -2,9 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>olx_assistant_domain</RootNamespace>
+    <RootNamespace>olx_assistant_contracts</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
+  </ItemGroup>
 
 </Project>
