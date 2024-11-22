@@ -2,12 +2,16 @@
 using System.Text.RegularExpressions;
 using olx_assistant_domain.Entities;
 using System.Globalization;
+using StackExchange.Redis;
 using HtmlAgilityPack;
 
 
 namespace olx_assistant_scraping;
 public class ProductsScraper
 {
+    static readonly ConnectionMultiplexer _redis = ConnectionMultiplexer.Connect($"localhost:6379");
+    static readonly IDatabase db = _redis.GetDatabase();
+
     private readonly HtmlWeb _web = new ();
     private readonly string _domain;
     private readonly Uri _uri;
@@ -22,12 +26,15 @@ public class ProductsScraper
         var htmlDoc = _web.Load(_uri);
 
         var htmlProductContainer = htmlDoc.DocumentNode.SelectSingleNode("//*[@data-testid=\"listing-grid\"]");
-        var htmlProductList = htmlProductContainer.SelectNodes("//*[@data-cy=\"l-card\"]");
+        var htmlProductList = htmlProductContainer
+             .SelectNodes("//*[@data-cy=\"l-card\"]")
+                 .Where(e => int.TryParse(e.Attributes["id"]?.Value, out int id) && !db.SetContains("product_id", id))
+                 .ToList();
 
         return await GetProductListParallel(htmlProductList);
     }
 
-    private async Task<List<Product>> GetProductListParallel(HtmlNodeCollection htmlList)
+    private async Task<List<Product>> GetProductListParallel(List<HtmlNode> htmlList)
     {
         var productTasks = new List<Task<Product>>();
 
