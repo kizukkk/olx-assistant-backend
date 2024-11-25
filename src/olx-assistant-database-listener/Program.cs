@@ -10,7 +10,6 @@ ListeningServices.RedisInit();
 var messageRepository = new ListeningServices();
 Task task = Task.Run(() => messageRepository.StartListening());
 
-// Заблокуйте головний потік до закриття програми
 Console.WriteLine("Listening for changes. Press Enter to stop.");
 Console.ReadLine();
 
