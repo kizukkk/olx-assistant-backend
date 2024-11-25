@@ -8,13 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.28.3" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.67.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.67.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageReference Include="NRedisStack" Version="0.13.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\olx-assistant-application\olx-assistant-application.csproj" />
     <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Protobuf Include="..\olx-assistant-contracts\Protos\IsCached.proto" GrpcServices="Client" />
+	</ItemGroup>
 
 </Project>
