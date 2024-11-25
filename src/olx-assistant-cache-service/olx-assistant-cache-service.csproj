@@ -16,7 +16,7 @@
   </ItemGroup>
 
     <ItemGroup>
-		<Protobuf Include="..\olx-assistant-contracts\Protos\isCashed.proto" GrpcServices="Server" />
+		<Protobuf Include="..\olx-assistant-contracts\Protos\IsCached.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service isChased{
+	rpc FieldIsCached (FieldIsCachedRequest) returns (FieldIsCachedReply);
+}
+
+message FieldIsCachedRequest{
+	int32 id = 1;
+}
+
+message FieldIsCachedReply{
+	bool status = 1;
+}

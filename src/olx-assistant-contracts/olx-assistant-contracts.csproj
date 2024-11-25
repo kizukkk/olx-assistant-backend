@@ -11,4 +11,8 @@
     <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Protobuf Include="Protos\IsCached.proto" GrpcServices="None" />
+	</ItemGroup>
+
 </Project>

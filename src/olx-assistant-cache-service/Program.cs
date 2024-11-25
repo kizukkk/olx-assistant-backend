@@ -8,7 +8,7 @@ builder.Services.AddGrpc();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapGrpcService<IsChasedService>();
+app.MapGrpcService<IsCachedService>();
 app.MapGet("/", () => "Service is working!");
 
 app.Run();
