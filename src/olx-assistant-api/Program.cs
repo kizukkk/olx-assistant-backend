@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddFastEndpoints();
 
 builder.Services.MsSqlDatabaseConfigure(builder.Configuration);
+builder.Services.CacheServiceConfig(builder.Configuration);
 
 builder.Services.AddHangfire(opt => opt.UseSqlServerStorage(builder.Configuration.GetConnectionString("Hangfire")));
 builder.Services.AddHangfireServer();
