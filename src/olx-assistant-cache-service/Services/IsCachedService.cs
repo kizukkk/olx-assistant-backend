@@ -16,7 +16,7 @@ public class IsCachedService : isChased.isChasedBase
         _logger.LogInformation($"Received request for ID: {request.Id}");
         return Task.FromResult(new FieldIsCachedReply
         {
-            Status = true // або ваша логіка перевірки
+            Status = true,
         });
     }
 }
