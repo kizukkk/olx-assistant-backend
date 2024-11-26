@@ -1,7 +1,8 @@
 ﻿using olx_assistant_application.Interfaces.IRepositories;
+using olx_assistant_contracts.Interfaces.IServices;
 
 namespace olx_assistant_application.Services;
-public class ProductCacheService
+public class ProductCacheService : IProductCacheService
 {
     private readonly IRedisCashedRepository _cashedRepository;
 
