@@ -1,6 +1,7 @@
 using olx_assistant_application.Interfaces.IRepositories;
 using olx_assistant_infrastructure.ServiceExtensions;
 using olx_assistant_application.Interfaces.IServices;
+using olx_assistant_contracts.Interfaces.IServices;
 using olx_assistant_infrastructure.Repositories;
 using olx_assistant_infrastructure.DbContexts;
 using olx_assistant_application.Services;
@@ -24,6 +25,7 @@ builder.Services.AddHangfireServer();
 
 builder.Services.AddScoped<IProductMatchingService, ProductMatchingService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddSingleton<IProductCacheService, ProductCacheService>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
