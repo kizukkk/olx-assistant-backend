@@ -1,5 +1,6 @@
 ﻿using olx_assistant_application.Interfaces.IRepositories;
 using olx_assistant_application.Interfaces.IServices;
+using olx_assistant_contracts.Interfaces.IServices;
 using olx_assistant_domain.Entities;
 using olx_assistant_scraping;
 using AutoMapper;
@@ -10,14 +11,17 @@ public class ProductMatchingService : IProductMatchingService
 {
     private readonly IMapper _mapper;
     private readonly IProductRepository _repo;
+    private readonly IProductCacheService _cache;
 
     public ProductMatchingService(
         IMapper mapper, 
-        IProductRepository repository
+        IProductRepository repository,
+        IProductCacheService cache
         ) 
     {
         _mapper = mapper;
         _repo = repository;
+        _cache = cache;
     }
 
     public void StartMatchingByTarget(Target target)
