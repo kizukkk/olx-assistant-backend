@@ -1,24 +1,19 @@
 ﻿using olx_assistant_application.Interfaces.IRepositories;
-using System.Threading.Tasks;
-using Grpc.Net.Client;
 
 namespace olx_assistant_infrastructure.Repositories;
 public class RedisCashedRepository : IRedisCashedRepository
 {
-    private readonly string _gRpcAddress;
+    private readonly isChased.isChasedClient _client;
 
-    public RedisCashedRepository(string gRpcAddress)
+    public RedisCashedRepository(isChased.isChasedClient client)
     {
-        _gRpcAddress = gRpcAddress;
+        _client = client;
     }
 
     public async Task<bool> ProductIsProcessed(int id)
-    {
-        using var channel = GrpcChannel.ForAddress(_gRpcAddress);
-        var client = new isChased.isChasedClient(channel);
-        
-        var reply = await client.FieldIsCachedAsync(
-            new FieldIsCachedRequest() { Id = 12344 });
+    {        
+        var reply = await _client.FieldIsCachedAsync(
+            new FieldIsCachedRequest() { Id = id });
 
         return reply.Status;
     }
