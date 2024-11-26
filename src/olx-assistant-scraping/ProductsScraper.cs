@@ -14,41 +14,40 @@ public class ProductsScraper
 
     private readonly HtmlWeb _web = new ();
     private readonly string _domain;
-    private readonly Uri _uri;
+    private Uri _uri;
     public ProductsScraper(Uri uri)
     {
         this._uri = uri;
         this._domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
     }
 
-    public async Task<List<Product>> GetProductList()
+
+    public List<int> GetProductsIdFromPage()
     {
         var htmlDoc = _web.Load(_uri);
 
-        var htmlProductContainer = htmlDoc.DocumentNode.SelectSingleNode("//*[@data-testid=\"listing-grid\"]");
-        var htmlProductList = htmlProductContainer
-             .SelectNodes("//*[@data-cy=\"l-card\"]")
-                 .Where(e => int.TryParse(e.Attributes["id"]?.Value, out int id) && !db.SetContains("product_id", id))
-                 .ToList();
-
-        return await GetProductListParallel(htmlProductList);
+        var htmlProductList = htmlDoc.DocumentNode
+            .SelectSingleNode("//*[@data-testid=\"listing-grid\"]")
+            .SelectNodes("//*[@data-cy=\"l-card\"]");
+        
+        return htmlProductList.Select(e => int.Parse(e.Attributes["id"].Value)).ToList();
     }
 
-    private async Task<List<Product>> GetProductListParallel(List<HtmlNode> htmlList)
+    public async Task<List<Product>> GetProductListParallelAsync(List<int> products)
     {
         var productTasks = new List<Task<Product>>();
 
-        Parallel.ForEach(htmlList, item =>
+        Parallel.ForEach(products, id =>
         {
-            var productUrl = item.SelectSingleNode(".//*[@data-cy=\"ad-card-title\"]/a").Attributes["href"].Value;
-            var htmlProduct = _web.Load(_domain + productUrl);
+            var productUrl = new Uri($"{_domain}/{id}");
+            var htmlProduct = _web.Load(productUrl);
 
             var product = ScrapProductFromHtml(htmlProduct);
             productTasks.Add(product);
         });
 
-        var products = await Task.WhenAll(productTasks);
-        return products.ToList();
+        var result = await Task.WhenAll(productTasks);
+        return result.ToList();
     }
 
     private async Task<Product> ScrapProductFromHtml(HtmlDocument html)
