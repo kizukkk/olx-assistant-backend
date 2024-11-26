@@ -36,8 +36,32 @@ public class ProductMatchingService : IProductMatchingService
 
     public async Task ProcessMatchingJob(Uri url)
     {
+        var semaphore = new SemaphoreSlim(10);
         var scraper = new ProductsScraper(url);
-        var products = await scraper.GetProductList();
+
+        var productsId = scraper.GetProductsIdFromPage();
+
+        var nonProcessedTask = productsId.Select(async e =>
+        {
+            await semaphore.WaitAsync();
+            try
+            {
+                return new
+                {
+                    Id = e,
+                    isCached = await _cache.ProductIsCached(e)
+                };
+            }
+            finally
+            {
+                semaphore.Release();
+            }
+        });
+        var results = await Task.WhenAll(nonProcessedTask);
+
+        var nonProcessed = results.Where(r => !r.isCached).Select(r => r.Id).ToList();
+
+        var products = await scraper.GetProductListParallelAsync(nonProcessed);
 
         try
         {
