@@ -20,7 +20,7 @@ public class MsSqlDbContext : DbContext
     {
         model.Entity<Product>()
             .Property(p => p.Price)
-            .HasColumnType("smallmoney");
+            .HasColumnType("money");
 
         model.Entity<Product>()
             .ToTable(tb => tb.HasTrigger("trgAfterInsert"));
