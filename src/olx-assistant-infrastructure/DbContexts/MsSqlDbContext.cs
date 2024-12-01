@@ -9,7 +9,7 @@ public class MsSqlDbContext : DbContext
     public DbSet<Target> Targets { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Keyword> Keywords { get; set; }
-
+    public DbSet<TargetTask> TargetTasks { get; set; }
 
     public MsSqlDbContext(DbContextOptions<MsSqlDbContext> options) 
         : base(options)
@@ -24,6 +24,9 @@ public class MsSqlDbContext : DbContext
 
         model.Entity<Product>()
             .ToTable(tb => tb.HasTrigger("trgAfterInsert"));
+
+        model.Entity<TargetTask>()
+            .HasKey(p => p.TaskId);
 
         base.OnModelCreating(model);
     }
