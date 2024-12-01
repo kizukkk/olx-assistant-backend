@@ -9,18 +9,25 @@ namespace olx_assistant_scraping;
 public class ProductsScraper
 {
     private readonly HtmlWeb _web = new ();
-    private readonly string _domain;
-    private Uri _uri;
+    private string Domain;
+    public Uri ScrapingURL
+    {
+        get { return ScrapingURL; }
+        set 
+        { 
+            ScrapingURL = value;
+            this.Domain = (Regex.Match(ScrapingURL.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
+        }
+    }
     public ProductsScraper(Uri uri)
     {
-        this._uri = uri;
-        this._domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
+        this.ScrapingURL = uri;
+        this.Domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
     }
-
 
     public List<int> GetProductsIdFromPage()
     {
-        var htmlDoc = _web.Load(_uri);
+        var htmlDoc = _web.Load(ScrapingURL);
 
         var htmlProductList = htmlDoc.DocumentNode
             .SelectSingleNode("//*[@data-testid=\"listing-grid\"]")
@@ -35,7 +42,7 @@ public class ProductsScraper
 
         Parallel.ForEach(products, id =>
         {
-            var productUrl = new Uri($"{_domain}/{id}");
+            var productUrl = new Uri($"{Domain}/{id}");
             var htmlProduct = _web.Load(productUrl);
 
             var product = ScrapProductFromHtml(htmlProduct);
