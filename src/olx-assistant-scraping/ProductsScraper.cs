@@ -2,16 +2,12 @@
 using System.Text.RegularExpressions;
 using olx_assistant_domain.Entities;
 using System.Globalization;
-using StackExchange.Redis;
 using HtmlAgilityPack;
 
 
 namespace olx_assistant_scraping;
 public class ProductsScraper
 {
-    static readonly ConnectionMultiplexer _redis = ConnectionMultiplexer.Connect($"localhost:6379");
-    static readonly IDatabase db = _redis.GetDatabase();
-
     private readonly HtmlWeb _web = new ();
     private readonly string _domain;
     private Uri _uri;
