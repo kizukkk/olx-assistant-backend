@@ -1,7 +1,7 @@
 ﻿namespace olx_assistant_domain.Entities.Common;
-public class TargetTask
+public class TargetJob
 {
-    public int TaskId { get; set; }
+    public string? jobId { get; set; }
     public int TargetId { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 
