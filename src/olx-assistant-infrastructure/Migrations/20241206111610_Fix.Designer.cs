@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using olx_assistant_infrastructure.DbContexts;
 
@@ -11,9 +12,11 @@ using olx_assistant_infrastructure.DbContexts;
 namespace olx_assistant_infrastructure.Migrations
 {
     [DbContext(typeof(MsSqlDbContext))]
-    partial class MsSqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241206111610_Fix")]
+    partial class Fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,6 +126,9 @@ namespace olx_assistant_infrastructure.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SearchTargetId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -130,6 +136,8 @@ namespace olx_assistant_infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SearchTargetId");
 
                     b.ToTable("Products", t =>
                         {
@@ -174,6 +182,15 @@ namespace olx_assistant_infrastructure.Migrations
                     b.HasOne("olx_assistant_domain.Entities.Product", null)
                         .WithMany("Tags")
                         .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("olx_assistant_domain.Entities.Product", b =>
+                {
+                    b.HasOne("olx_assistant_domain.Entities.Target", "SearchTarget")
+                        .WithMany()
+                        .HasForeignKey("SearchTargetId");
+
+                    b.Navigation("SearchTarget");
                 });
 
             modelBuilder.Entity("olx_assistant_domain.Entities.Product", b =>
