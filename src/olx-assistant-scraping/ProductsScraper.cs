@@ -9,20 +9,22 @@ namespace olx_assistant_scraping;
 public class ProductsScraper
 {
     private readonly HtmlWeb _web = new ();
-    private string Domain;
+    private Uri _scrapingURL;
     public Uri ScrapingURL
     {
-        get { return ScrapingURL; }
-        set 
-        { 
-            ScrapingURL = value;
-            this.Domain = (Regex.Match(ScrapingURL.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
+        get { return _scrapingURL; }
+        set
+        {
+            _scrapingURL = value;
+            this.Domain = Regex.Match(_scrapingURL.ToString(), @"^(https?://[^/]+)").Groups[1].Value;
         }
     }
+
+    public string Domain { get; private set; }
+
     public ProductsScraper(Uri uri)
     {
         this.ScrapingURL = uri;
-        this.Domain = (Regex.Match(uri.ToString(), @"^(https?://[^/]+)").Groups[1].Value);
     }
 
     public List<int> GetProductsIdFromPage()
