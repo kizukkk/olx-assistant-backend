@@ -1,8 +1,11 @@
 ﻿using olx_assistant_application.Interfaces.IRepositories;
+using olx_assistant_contracts.Interfaces.IRepositories;
 using olx_assistant_application.Interfaces.IServices;
 using olx_assistant_contracts.Interfaces.IServices;
+using olx_assistant_domain.Entities.Common;
 using olx_assistant_domain.Entities;
 using olx_assistant_scraping;
+using Hangfire.Server;
 using AutoMapper;
 using Hangfire;
 
@@ -11,17 +14,20 @@ public class ProductMatchingService : IProductMatchingService
 {
     private readonly IMapper _mapper;
     private readonly IProductRepository _repo;
+    private readonly IJobTargetRepository _jobTarget;
     private readonly IProductCacheService _cache;
 
     public ProductMatchingService(
         IMapper mapper, 
         IProductRepository repository,
-        IProductCacheService cache
+        IProductCacheService cache,
+        IJobTargetRepository jobTarget
         ) 
     {
         _mapper = mapper;
         _repo = repository;
         _cache = cache;
+        _jobTarget = jobTarget;
     }
 
     public void StartMatchingByTarget(Target target)
@@ -29,13 +35,15 @@ public class ProductMatchingService : IProductMatchingService
         Uri paginatedUrl = new Uri($"{target.TargetUri}/?page={1}");
 
         var scapingJob = 
-        BackgroundJob.Enqueue(() => ProcessMatchingJob(paginatedUrl));
+        BackgroundJob.Enqueue(() => ProcessMatchingJob(paginatedUrl, null));
 
-        Console.WriteLine($"Started Job with {scapingJob} id");
+        RegisterTask(scapingJob, target.Id);
     }
 
-    public async Task ProcessMatchingJob(Uri url)
+    public async Task ProcessMatchingJob(Uri url, PerformContext context)
     {
+        string jobId = context.BackgroundJob.Id;
+
         var semaphore = new SemaphoreSlim(10);
         var scraper = new ProductsScraper(url);
 
@@ -63,15 +71,20 @@ public class ProductMatchingService : IProductMatchingService
 
         var products = await scraper.GetProductListParallelAsync(nonProcessed);
 
-        try
-        {
-            products.ForEach(item => _repo.Create(item));
-            _repo.SaveChanges();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
+        products.ForEach(item => AddProcessedProduct(jobId, item));
+    }
+
+    private void AddProcessedProduct(string jobId, Product product)
+    {
+        product.ProcessedByTaskId = jobId;
+        _repo.Create(product);
+        _repo.SaveChanges();
+    }
+
+    private void RegisterTask(string jobId, int targetId)
+    {
+        var targetTask = new TargetJob { jobId = jobId, TargetId = targetId };
+        _jobTarget.RegisterTask(targetTask);
 
     }
 }
