@@ -35,19 +35,19 @@ public class ProductMatchingService : IProductMatchingService
         Uri paginatedUrl = new Uri($"{target.TargetUri}/?page={1}");
 
         var scapingJob = 
-        BackgroundJob.Enqueue(() => ProcessMatchingJob(paginatedUrl, null));
+        BackgroundJob.Enqueue(() => ProcessMatchingJob(paginatedUrl, null, target));
 
         RegisterTask(scapingJob, target.Id);
     }
 
-    public async Task ProcessMatchingJob(Uri url, PerformContext context)
+    public async Task ProcessMatchingJob(Uri url, PerformContext context, Target target)
     {
         string jobId = context.BackgroundJob.Id;
 
-        var semaphore = new SemaphoreSlim(10);
-        var scraper = new ProductsScraper(url);
+        var semaphore = new SemaphoreSlim(5);
+        var _scraper = new ProductsScraper(url);
 
-        var productsId = scraper.GetProductsIdFromPage();
+        var productsId = _scraper.GetProductsIdFromPage();
 
         var nonProcessedTask = productsId.Select(async e =>
         {
@@ -69,7 +69,7 @@ public class ProductMatchingService : IProductMatchingService
 
         var nonProcessed = results.Where(r => !r.isCached).Select(r => r.Id).ToList();
 
-        var products = await scraper.GetProductListParallelAsync(nonProcessed);
+        var products = await _scraper.GetProductListParallelAsync(nonProcessed);
 
         products.ForEach(item => AddProcessedProduct(jobId, item));
     }
