@@ -63,19 +63,19 @@ public class ProductsScraper
         var productName = html.DocumentNode.SelectSingleNode("//*[@data-cy=\"ad_title\"]/h4").InnerText;
         var productDesc = html.DocumentNode.SelectSingleNode("//*[@data-cy=\"ad_description\"]/div").InnerText;
 
-        var stringProductPrice = html.DocumentNode.SelectSingleNode("//*[@class=\"css-90xrc0\"]").InnerText.Replace(" ", String.Empty);
+        var stringProductPrice = html.DocumentNode.SelectSingleNode("//*[@class=\"css-fqcbii\"]").InnerText.Replace(" ", String.Empty);
         var price = decimal.Parse(Regex.Match(stringProductPrice, @"\d+").Value, CultureInfo.InvariantCulture);
         var priceUSD = stringProductPrice.Contains("грн") ? await CurrencyConverter.ConvertUAH2USD(price) : price;
 
         var stringProductId = html.DocumentNode.SelectSingleNode("//*[@data-cy=\"ad-footer-bar-section\"]/span").InnerText;
         var productId = int.Parse(Regex.Match(stringProductId, @"\d+").Value, CultureInfo.InvariantCulture);
 
-        var htmlProductTagList = html.DocumentNode.SelectNodes("//*[@class=\"css-rn93um\"]/li");
+        var htmlProductTagList = html.DocumentNode.SelectNodes("//*[@class=\"css-41yf00\"]/div");
         foreach (var item in htmlProductTagList)
         {
             var tag = new Tag()
             {
-                Name = item.SelectSingleNode("./p").InnerText,
+                Name = item.InnerText,
             };
             productTags.Add(tag);
         }
