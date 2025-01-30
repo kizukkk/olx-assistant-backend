@@ -14,8 +14,16 @@ public class IsCachedService : isChased.isChasedBase
         IConnectionMultiplexer connectionMultiplexer)
     {
         _logger = logger;
-        _connectionMultiplexer = connectionMultiplexer;
-        _database = _connectionMultiplexer.GetDatabase();
+        try
+        {
+            _connectionMultiplexer = connectionMultiplexer;
+            _database = _connectionMultiplexer.GetDatabase();
+        }
+        catch(RedisConnectionException ex)
+        {
+            Console.WriteLine("Ops! Some problems with Redis DB connection. " +
+                $"Ensure that DB is running and connection string is valid.\n {ex.Message}");
+        }
     }
 
     public override Task<FieldIsCachedReply> FieldIsCached(FieldIsCachedRequest request, ServerCallContext context)
