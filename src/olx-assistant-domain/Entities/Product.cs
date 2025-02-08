@@ -8,7 +8,7 @@ public class Product : BaseEntity
     public string? Title { get; set; }
     public string? Description { get; set; }
     public decimal Price { get; set; } = decimal.Zero;
-    public int Rating { get; set; } = 0;
+    public float Rating { get; set; } = 0f;
     public List<Tag>? Tags { get; set; }
 
 }
