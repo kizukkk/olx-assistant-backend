@@ -38,6 +38,21 @@ public class ProductsScraper
         return htmlProductList.Select(e => int.Parse(e.Attributes["id"].Value)).ToList();
     }
 
+    public List<(int ID, string Title)> GetFastProductsInfoFromPage()
+    {
+        var htmlDoc = _web.Load(ScrapingURL);
+
+        var htmlProductList = htmlDoc.DocumentNode
+            .SelectSingleNode("//*[@data-testid=\"listing-grid\"]")
+            .SelectNodes("//*[@data-cy=\"l-card\"]");
+
+        return htmlProductList.Select(e => {
+            var id = int.Parse(e.Attributes["id"].Value);
+            var title = e.SelectSingleNode(".//h4")!.InnerText.Trim();
+            return (id, title);
+        }).ToList();
+    }
+
     public async Task<List<Product>> GetProductListParallelAsync(List<int> products)
     {
         var productTasks = new List<Task<Product>>();

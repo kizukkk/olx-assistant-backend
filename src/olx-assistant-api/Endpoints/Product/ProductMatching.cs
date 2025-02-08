@@ -23,6 +23,7 @@ public class ProductMatching : EndpointWithoutRequest
         var target = new olx_assistant_domain.Entities.Target()
         {
             TargetUri = new Uri("https://www.olx.ua/uk/transport/selhoztehnika"),
+            Keywords = new List<Keyword> { new("Трактор", 1f), new("Тракторець", .9f) }
         };
 
        _matchingService.StartMatchingByTarget(target);

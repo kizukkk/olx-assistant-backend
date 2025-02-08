@@ -18,11 +18,11 @@ public class ProductMatchingService : IProductMatchingService
     private readonly IProductCacheService _cache;
 
     public ProductMatchingService(
-        IMapper mapper, 
+        IMapper mapper,
         IProductRepository repository,
         IProductCacheService cache,
         IJobTargetRepository jobTarget
-        ) 
+        )
     {
         _mapper = mapper;
         _repo = repository;
@@ -34,10 +34,58 @@ public class ProductMatchingService : IProductMatchingService
     {
         Uri paginatedUrl = new Uri($"{target.TargetUri}/?page={1}");
 
-        var scapingJob = 
+        var scapingJob =
         BackgroundJob.Enqueue(() => ProcessMatchingJob(paginatedUrl, null, target));
 
         RegisterTask(scapingJob, target.Id);
+    }
+
+    public void StartFastMatchingByTarget(Target target)
+    {
+        Uri paginatedUrl = new Uri($"{target.TargetUri}/?page={1}");
+
+        var scapingJob =
+        BackgroundJob.Enqueue(() => FastProcessMatchingJob(paginatedUrl, null, target));
+
+        RegisterTask(scapingJob, target.Id);
+    }
+
+    public async Task FastProcessMatchingJob(Uri url, PerformContext context, Target target)
+    {
+        string jobId = context.BackgroundJob.Id;
+
+        var semaphore = new SemaphoreSlim(5);
+        var _scraper = new ProductsScraper(url);
+
+        var rawProducts = _scraper.GetFastProductsInfoFromPage();
+
+        var nonProcessedTask = rawProducts.Select(async e =>
+        {
+            await semaphore.WaitAsync();
+            try
+            {
+                var product = new Product();
+                product.Title = e.Title;
+                product.Description = "";
+                return new
+                {
+                    Id = e.ID,
+                    isCached = await _cache.ProductIsCached(e.ID),
+                    Rating = ProductKeywordRelevanceEvaluatorService.RelevanceValue(product, target)
+            };
+            }
+            finally
+            {
+                semaphore.Release();
+            }
+        });
+        var results = await Task.WhenAll(nonProcessedTask);
+
+        var nonProcessed = results.Where(r => !r.isCached && r.Rating != 0f).Select(r => r.Id).ToList();
+
+        var products = await _scraper.GetProductListParallelAsync(nonProcessed);
+
+        products.ForEach(item => AddProcessedProduct(jobId, item, target));
     }
 
     public async Task ProcessMatchingJob(Uri url, PerformContext context, Target target)
@@ -71,12 +119,15 @@ public class ProductMatchingService : IProductMatchingService
 
         var products = await _scraper.GetProductListParallelAsync(nonProcessed);
 
-        products.ForEach(item => AddProcessedProduct(jobId, item));
+        products.ForEach(item => AddProcessedProduct(jobId, item, target));
     }
 
-    private void AddProcessedProduct(string jobId, Product product)
+    private void AddProcessedProduct(string jobId, Product product, Target target)
     {
         product.ProcessedByTaskId = jobId;
+
+        product.Rating = ProductKeywordRelevanceEvaluatorService.RelevanceValue(product, target);
+
         _repo.Create(product);
         _repo.SaveChanges();
     }
