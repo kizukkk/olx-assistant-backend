@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\olx-assistant-application\olx-assistant-application.csproj" />
-    <ProjectReference Include="..\olx-assistant-infrastructure\olx-assistant-infrastructure.csproj" />
+    <ProjectReference Include="..\Application\application.csproj" />
+    <ProjectReference Include="..\Infrastructure\infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

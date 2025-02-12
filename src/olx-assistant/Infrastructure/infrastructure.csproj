@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>olx_assistant_infrastructure</RootNamespace>
+    <RootNamespace>Infrastructure</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -18,12 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\olx-assistant-application\olx-assistant-application.csproj" />
-    <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
+    <ProjectReference Include="..\Application\application.csproj" />
+    <ProjectReference Include="..\Domain\domain.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="..\olx-assistant-contracts\Protos\IsCached.proto" GrpcServices="Client" />
+		<Protobuf Include="..\Contracts\Protos\IsCached.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 </Project>

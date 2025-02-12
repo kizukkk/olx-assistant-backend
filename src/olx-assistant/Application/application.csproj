@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>olx_assistant_application</RootNamespace>
+    <RootNamespace>Application</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\olx-assistant-contracts\olx-assistant-contracts.csproj" />
-    <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
-    <ProjectReference Include="..\olx-assistant-scraping\olx-assistant-scraping.csproj" />
+    <ProjectReference Include="..\Contracts\contracts.csproj" />
+    <ProjectReference Include="..\Domain\domain.csproj" />
+    <ProjectReference Include="..\Scraping\scraping.csproj" />
   </ItemGroup>
 
   <ItemGroup>

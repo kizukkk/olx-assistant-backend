@@ -1,5 +1,6 @@
 ﻿using olx_assistant_application.Interfaces.IServices;
 using olx_assistant_application.DTOs.Shared;
+using olx_assistant_domain.Entities.Common;
 using FastEndpoints;
 
 namespace olx_assistant_api.Endpoints.Product;
@@ -26,7 +27,8 @@ public class ProductMatching : EndpointWithoutRequest
             Keywords = new List<Keyword> { new("Трактор", 1f), new("Тракторець", .9f) }
         };
 
-       _matchingService.StartMatchingByTarget(target);
+
+        _matchingService.StartFastMatchingByTarget(target);
 
        await SendOkAsync();
     }
