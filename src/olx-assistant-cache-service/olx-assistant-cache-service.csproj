@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Contracts\contracts.csproj" />
+    <ProjectReference Include="..\olx-assistant-contracts\olx-assistant-contracts.csproj" />
   </ItemGroup>
 
     <ItemGroup>
-		<Protobuf Include="..\Contracts\Protos\IsCached.proto" GrpcServices="Server" />
+		<Protobuf Include="..\olx-assistant-contracts\Protos\IsCached.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 </Project>

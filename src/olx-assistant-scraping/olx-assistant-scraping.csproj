@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Scraping</RootNamespace>
+    <RootNamespace>olx_assistant_scraping</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\domain.csproj" />
+    <ProjectReference Include="..\olx-assistant-domain\olx-assistant-domain.csproj" />
   </ItemGroup>
 
 </Project>
